@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "clients")
+//@Table(name = "clients", schema = "bank")
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,15 +29,14 @@ public class Client {
     @Column(name = "role", nullable = false, columnDefinition = "integer default 0")
     private Integer role;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "clients_id")
-    private List<CreditCard> creditCards = new ArrayList<>();
+//    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JoinColumn(name = "clients_id")
+//    private List<CreditCard> creditCards = new ArrayList<>();
 
     protected Client() {
     }
 
-    public Client(Long id, String login, String password, String email, String firstName, String lastName, Integer role) {
-        this.id = id;
+    public Client(String login, String password, String email, String firstName, String lastName, Integer role) {
         this.login = login;
         this.password = password;
         this.email = email;
@@ -97,13 +97,13 @@ public class Client {
         this.role = role;
     }
 
-    public List<CreditCard> getCreditCards() {
-        return creditCards;
-    }
-
-    public void setCreditCards(List<CreditCard> creditCards) {
-        this.creditCards = creditCards;
-    }
+//    public List<CreditCard> getCreditCards() {
+//        return creditCards;
+//    }
+//
+//    public void setCreditCards(List<CreditCard> creditCards) {
+//        this.creditCards = creditCards;
+//    }
 
     @Override
     public String toString() {

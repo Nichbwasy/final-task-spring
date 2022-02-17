@@ -1,5 +1,8 @@
 package com.epam.controllers;
 
+import com.epam.models.Client;
+import com.epam.services.classes.RegistrationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,6 +11,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class RegisterController {
+
+
+    @Autowired
+    private RegistrationService registrationService;
+
     @GetMapping("/register")
     public String register(Model model) {
         return "register";
@@ -22,14 +30,9 @@ public class RegisterController {
                                @RequestParam("last_name") String lastName,
                                Model model
     ) {
-        System.out.println("-=-=-=-=-< WARNING >-=-=-=-=-");
-        System.out.println("|| LOGIN :" + login);
-        System.out.println("|| PASSWORD :" + password);
-        System.out.println("|| REPEAT PASSWORD :" + repeatPassword);
-        System.out.println("|| EMAIL :" + email);
-        System.out.println("|| FIRST NAME :" + firstName);
-        System.out.println("|| LAST NAME :" + lastName);
-        System.out.println("-=-=-=-=--=-=--=-=-=-=-=-=-=-");
+        Client client = registrationService.registerClient(login, password, email, firstName, lastName);
+        System.out.println("<<< REGISTERED CLIENT >>>");
+        System.out.println(client);
         return "redirect:/cards";
     }
 }

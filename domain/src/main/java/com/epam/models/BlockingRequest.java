@@ -3,14 +3,11 @@ package com.epam.models;
 import javax.persistence.*;
 
 @Entity(name = "blocking_request")
+//@Table(name = "blocking_request", schema = "bank")
 public class BlockingRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-    @OneToOne
-    @JoinColumn(name = "credit_card_id")
-    private CreditCard creditCard;
 
     @Column(name = "type", nullable = false)
     private Integer type;
@@ -19,7 +16,7 @@ public class BlockingRequest {
     }
 
     public BlockingRequest(CreditCard creditCard, Integer type) {
-        this.creditCard = creditCard;
+        //this.creditCard = creditCard;
         this.type = type;
     }
 
@@ -31,14 +28,6 @@ public class BlockingRequest {
         return type;
     }
 
-    public CreditCard getCreditCard() {
-        return creditCard;
-    }
-
-    public void setCreditCard(CreditCard creditCard) {
-        this.creditCard = creditCard;
-    }
-
     public void setType(Integer type) {
         this.type = type;
     }
@@ -47,7 +36,6 @@ public class BlockingRequest {
     public String toString() {
         return "BlockingRequest{" +
                 "id=" + id +
-                ", creditCard=" + creditCard +
                 ", type=" + type +
                 '}';
     }

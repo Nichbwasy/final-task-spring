@@ -1,8 +1,11 @@
 package com.epam.models;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "credit_cards")
+//@Table(name = "credit_cards", schema = "bank")
 public class CreditCard {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,9 +26,7 @@ public class CreditCard {
     @Column(name = "locked", columnDefinition = "boolean default false")
     private Boolean isLocked;
 
-    @OneToOne
-    @JoinColumn(name = "balance_id")
-    private Balance balance;
+
 
     public CreditCard() {
     }
@@ -36,7 +37,7 @@ public class CreditCard {
         this.cardExpirationYear = cardExpirationYear;
         this.cvv = cvv;
         this.isLocked = isLocked;
-        this.balance = balance;
+        //this.balance = balance;
     }
 
     public Long getId() {
