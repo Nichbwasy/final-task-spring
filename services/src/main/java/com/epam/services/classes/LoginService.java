@@ -21,7 +21,7 @@ public class LoginService implements ILoginService {
     public Client loginClient(String login, String password) {
         String encryptedPassword = Encryptor.encryptSHA256(password);
         Client client = clientRepository.findAllByLogin(login);
-        System.out.println(client);
-        return client;
+        if (client.getPassword().trim().equals(encryptedPassword)) return client;
+        else return null;
     }
 }

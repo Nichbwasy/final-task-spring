@@ -29,7 +29,7 @@
                 <li><a href="/cards/#" class="nav-link px-2 link-dark">Transactions</a></li>
                 <li><a href="/cards/#" class="nav-link px-2 link-dark">Requests</a></li>
                 <li><a href="/cards/#" class="nav-link px-2 link-dark">History</a></li>
-                <li><p class="nav-link px-2 link-dark ">Hello!</p></li>
+                <li><p class="nav-link px-2 link-dark " th:text="${'Hello ' + client.firstName + client.lastName + '!'}" /></li>
             </ul>
 
         </header>

@@ -4,11 +4,10 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity(name = "replenishments")
-//@Table(name = "replenishments", schema = "bank")
 public class Replenishment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "card_name", length = 16, nullable = false)
@@ -49,7 +48,7 @@ public class Replenishment {
     public String toString() {
         return "Replenishment{" +
                 "id=" + id +
-                ", cardNumber='" + cardNumber + '\'' +
+                ", cardNumber='" + cardNumber.trim() + '\'' +
                 ", amount=" + amount +
                 '}';
     }

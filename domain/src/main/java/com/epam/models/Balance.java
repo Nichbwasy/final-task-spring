@@ -4,14 +4,16 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity(name = "balances")
-//@Table(name = "balances", schema = "bank")
 public class Balance {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "amount", columnDefinition="Decimal(10,2) default '0.00'")
     private BigDecimal amount = BigDecimal.ZERO;
+
+    @OneToOne(mappedBy = "balance")
+    private CreditCard creditCard;
 
     protected Balance() {
     }
@@ -30,6 +32,14 @@ public class Balance {
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
+    }
+
+    public CreditCard getCreditCard() {
+        return creditCard;
+    }
+
+    public void setCreditCard(CreditCard creditCard) {
+        this.creditCard = creditCard;
     }
 
     @Override

@@ -5,10 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "clients")
-//@Table(name = "clients", schema = "bank")
 public class Client {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "login", unique = true, length = 64, nullable = false)
@@ -29,9 +28,8 @@ public class Client {
     @Column(name = "role", nullable = false, columnDefinition = "integer default 0")
     private Integer role;
 
-//    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JoinColumn(name = "clients_id")
-//    private List<CreditCard> creditCards = new ArrayList<>();
+    @OneToMany(mappedBy = "client", targetEntity = CreditCard.class, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CreditCard> creditCards;
 
     protected Client() {
     }
@@ -43,6 +41,7 @@ public class Client {
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
+        this.creditCards = new ArrayList<>();
     }
 
     public Long getId() {
@@ -97,23 +96,23 @@ public class Client {
         this.role = role;
     }
 
-//    public List<CreditCard> getCreditCards() {
-//        return creditCards;
-//    }
-//
-//    public void setCreditCards(List<CreditCard> creditCards) {
-//        this.creditCards = creditCards;
-//    }
+    public List<CreditCard> getCreditCards() {
+        return creditCards;
+    }
+
+    public void setCreditCards(List<CreditCard> creditCards) {
+        this.creditCards = creditCards;
+    }
 
     @Override
     public String toString() {
         return "Client{" +
                 "id=" + id +
-                ", login='" + login + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
+                ", login='" + login.trim() + '\'' +
+                ", password='" + password.trim() + '\'' +
+                ", email='" + email.trim() + '\'' +
+                ", firstName='" + firstName.trim() + '\'' +
+                ", lastName='" + lastName.trim() + '\'' +
                 ", role=" + role +
                 '}';
     }

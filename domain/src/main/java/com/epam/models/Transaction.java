@@ -4,17 +4,16 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity(name = "transactions")
-//@Table(name = "transactions", schema = "bank")
 public class Transaction {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "sender_card_number", length = 16, unique = true, nullable = false)
+    @Column(name = "sender_card_number", length = 16, nullable = false)
     private String senderCardNumber;
 
-    @Column(name = "recipient_card_number", length = 16, unique = true, nullable = false)
+    @Column(name = "recipient_card_number", length = 16, nullable = false)
     private String recipientCardNumber;
 
     @Column(name = "amount", nullable = false)
@@ -61,8 +60,8 @@ public class Transaction {
     public String toString() {
         return "Transaction{" +
                 "id=" + id +
-                ", senderCardNumber='" + senderCardNumber + '\'' +
-                ", recipientCardNumber='" + recipientCardNumber + '\'' +
+                ", senderCardNumber='" + senderCardNumber.trim() + '\'' +
+                ", recipientCardNumber='" + recipientCardNumber.trim() + '\'' +
                 ", amount=" + amount +
                 '}';
     }

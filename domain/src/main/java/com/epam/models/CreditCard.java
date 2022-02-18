@@ -5,10 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "credit_cards")
-//@Table(name = "credit_cards", schema = "bank")
 public class CreditCard {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "card_number", nullable = false, unique = true, length = 16)
@@ -26,18 +25,32 @@ public class CreditCard {
     @Column(name = "locked", columnDefinition = "boolean default false")
     private Boolean isLocked;
 
+    @ManyToOne
+    @JoinColumn(name = "clients", nullable = false)
+    private Client client;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "balance_id", referencedColumnName = "id")
+    private Balance balance;
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
 
 
     public CreditCard() {
     }
 
-    public CreditCard(String cardNumber, String cardExpirationMonth, String cardExpirationYear, String cvv, Boolean isLocked, Balance balance) {
+    public CreditCard(String cardNumber, String cardExpirationMonth, String cardExpirationYear, String cvv, Boolean isLocked) {
         this.cardNumber = cardNumber;
         this.cardExpirationMonth = cardExpirationMonth;
         this.cardExpirationYear = cardExpirationYear;
         this.cvv = cvv;
         this.isLocked = isLocked;
-        //this.balance = balance;
     }
 
     public Long getId() {
@@ -88,10 +101,10 @@ public class CreditCard {
     public String toString() {
         return "CreditCard{" +
                 "id=" + id +
-                ", cardNumber='" + cardNumber + '\'' +
-                ", cardExpirationMonth='" + cardExpirationMonth + '\'' +
-                ", cardExpirationYear='" + cardExpirationYear + '\'' +
-                ", cvv='" + cvv + '\'' +
+                ", cardNumber='" + cardNumber.trim() + '\'' +
+                ", cardExpirationMonth='" + cardExpirationMonth.trim() + '\'' +
+                ", cardExpirationYear='" + cardExpirationYear.trim() + '\'' +
+                ", cvv='" + cvv.trim() + '\'' +
                 ", isLocked=" + isLocked +
                 '}';
     }

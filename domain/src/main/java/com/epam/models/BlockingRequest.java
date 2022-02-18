@@ -3,10 +3,9 @@ package com.epam.models;
 import javax.persistence.*;
 
 @Entity(name = "blocking_request")
-//@Table(name = "blocking_request", schema = "bank")
 public class BlockingRequest {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "type", nullable = false)

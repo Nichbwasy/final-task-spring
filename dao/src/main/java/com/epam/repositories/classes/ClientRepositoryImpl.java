@@ -1,9 +1,7 @@
 package com.epam.repositories.classes;
 
 import com.epam.models.Client;
-import com.epam.repositories.interfaces.IClientRepository;
 import com.epam.repositories.interfaces.custom.ICustomClientRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
