@@ -8,7 +8,96 @@
 <body>
 <div th:insert="blocks/headers :: main_header" />
 <div class="container mt-5">
-    <h1>Welcome! This is credit cards page!</h1>
+    <div th:if="${session.client == null}">
+        <h1>You must be registered!</h1>
+    </div>
+    <div th:unless="${session.client == null}">
+        <div th:if="${session.client.creditCards == null}">
+            <h1>You don't have credit cards!</h1>
+        </div>
+        <div th:unless="${session.client.creditCards == null}">
+            <div class="d-flex justify-content-center" >
+                <table class="table-light table-striped table-bordered">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col"><div class="text-center">#</div></th>
+                        <th scope="col"><div class="text-center">Card number</div></th>
+                        <th scope="col"><div class="text-center">Expiration month</div></th>
+                        <th scope="col"><div class="text-center">Expiration year</div></th>
+                        <th scope="col"><div class="text-center">Balance</div></th>
+                        <th scope="col"><div class="text-center">Blocked</div></th>
+                        <th scope="col"><div class="text-center">Block / Unblock</div></th>
+                        <th scope="col"><div class="text-center">Remove</div></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="card: ${session.client.creditCards}">
+                        <td>
+                            <div class="text-center text-dark">
+                                *
+                            </div>
+                        </td>
+                        <td>
+                            <div class="text-center text-dark">
+                                <div th:text="${card.cardNumber}"/>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="text-center text-dark">
+                                <div th:text="${card.cardExpirationMonth}"/>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="text-center text-dark">
+                                <div th:text="${card.cardExpirationYear}"/>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="text-center text-dark">
+                                <div th:text="${card.balance.amount}"/>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="text-center text-dark">
+                                <div th:if="${card.locked == false}">No</div>
+                                <div th:unless="${card.locked == false}">Yes</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="text-center text-dark">
+                                <button type="submit" class="btn btn-big btn-primary">
+                                    <a href="${pageContext.request.contextPath}/cards/block_card?cardNumber=${card.cardNumber}&cardLock=${card.locked}" class="text-center text-dark">
+                                        Send request
+                                    </a>
+                                </button>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="text-center text-dark">
+                                <button type="submit" class="btn btn-big btn-primary">
+                                    <a href="${pageContext.request.contextPath}/cards/remove_card?cardNumber=${card.cardNumber}" class="text-center text-dark">
+                                        Remove card
+                                    </a>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <br>
+        <div class="d-flex justify-content-center">
+            <div class="text-right">
+                <button type="submit" class="btn btn-big btn-primary">
+                    <a href="/cards/add" class="text-center text-dark">
+                        Add card
+                    </a>
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 <div th:insert="blocks/footers :: welcome_footer"/>
 </body>

@@ -1,9 +1,12 @@
 package com.epam.models;
 
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity(name = "transactions")
+@EnableAutoConfiguration
 public class Transaction {
 
     @Id

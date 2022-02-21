@@ -29,7 +29,14 @@
                 <li><a href="/cards/#" class="nav-link px-2 link-dark">Transactions</a></li>
                 <li><a href="/cards/#" class="nav-link px-2 link-dark">Requests</a></li>
                 <li><a href="/cards/#" class="nav-link px-2 link-dark">History</a></li>
-                <li><p class="nav-link px-2 link-dark " th:text="${'Hello ' + client.firstName + client.lastName + '!'}" /></li>
+                <li>
+                    <span th:if="${session.client == null}">
+                        <a href="/register" class="nav-link px-2 ">Create account</a>
+                    </span>
+                    <span th:unless="${session.client == null}">
+                        <p class="nav-link px-2 link-dark " th:text="${'Hello ' + session.client.firstName + ' ' + session.client.lastName + '!'}" />
+                    </span>
+                </li>
             </ul>
 
         </header>

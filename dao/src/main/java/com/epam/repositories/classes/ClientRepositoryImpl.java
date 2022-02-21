@@ -15,9 +15,16 @@ public class ClientRepositoryImpl implements ICustomClientRepository {
     EntityManager entityManager;
 
     @Override
-    public Client findAllByLogin(String login) {
+    public Client findByLogin(String login) {
         Query query = entityManager.createQuery("SELECT * FROM bank.clients WHERE login=?", Client.class);
         query.setParameter(1, login);
+        return (Client) query.getSingleResult();
+    }
+
+    @Override
+    public Client findByEmail(String email) {
+        Query query = entityManager.createQuery("SELECT * FROM bank.clients WHERE email=?", Client.class);
+        query.setParameter(1, email);
         return (Client) query.getSingleResult();
     }
 }

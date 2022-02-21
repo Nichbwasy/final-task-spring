@@ -3,5 +3,6 @@ package com.epam.repositories.interfaces.custom;
 import com.epam.models.Client;
 
 public interface ICustomClientRepository {
-    Client findAllByLogin(String login);
+    Client findByLogin(String login);
+    Client findByEmail(String email);
 }

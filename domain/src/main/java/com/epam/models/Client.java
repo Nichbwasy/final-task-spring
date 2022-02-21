@@ -1,10 +1,13 @@
 package com.epam.models;
 
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "clients")
+@EnableAutoConfiguration
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +38,17 @@ public class Client {
     }
 
     public Client(String login, String password, String email, String firstName, String lastName, Integer role) {
+        this.login = login;
+        this.password = password;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.role = role;
+        this.creditCards = new ArrayList<>();
+    }
+
+    public Client(Long id, String login, String password, String email, String firstName, String lastName, Integer role) {
+        this.id = id;
         this.login = login;
         this.password = password;
         this.email = email;
@@ -116,4 +130,6 @@ public class Client {
                 ", role=" + role +
                 '}';
     }
+
+
 }

@@ -1,4 +1,4 @@
-package com.epam.controllers;
+package com.epam.controllers.authorization;
 
 import com.epam.models.Client;
 import com.epam.services.classes.LoginService;
@@ -7,14 +7,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
-
-import javax.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+@SessionAttributes("client")
 public class LogInController {
     private final static Logger LOGGER = LoggerFactory.getLogger(LogInController.class);
 
@@ -31,15 +27,14 @@ public class LogInController {
                                 @RequestParam(name = "password") String password,
                                 Model session)
     {
-        Client client = loginService.loginClient(login, password);
-        if (client != null) {
-            LOGGER.info("Client '{}' has been authorized in the system", client);
-            session.addAttribute("client", client);
-            return "/cards";
-        } else {
-            LOGGER.warn("Client with login '{}' wasn't found! Wrong login or password!", login);
-            session.addAttribute("client", null);
-            return "redirect:/";
-        }
+        if (loginService.loginExist(login)) {
+            Client client = loginService.loginClient(login, password);
+            if (client != null) {
+                LOGGER.info("Client '{}' has been authorized in the system", client);
+                session.addAttribute("client", client);
+                return "redirect:/cards";
+            } else LOGGER.warn("Password doesn't match for the client with login '{}'", login);
+        } else LOGGER.warn("User with login '{}' doesn't exist!", login);
+        return "redirect:/";
     }
 }

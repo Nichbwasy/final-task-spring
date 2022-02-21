@@ -1,9 +1,12 @@
 package com.epam.models;
 
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity(name = "balances")
+@EnableAutoConfiguration
 public class Balance {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

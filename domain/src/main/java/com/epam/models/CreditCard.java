@@ -1,10 +1,13 @@
 package com.epam.models;
 
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "credit_cards")
+@EnableAutoConfiguration
 public class CreditCard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,12 +48,14 @@ public class CreditCard {
     public CreditCard() {
     }
 
-    public CreditCard(String cardNumber, String cardExpirationMonth, String cardExpirationYear, String cvv, Boolean isLocked) {
+    public CreditCard(Client client, String cardNumber, String cardExpirationMonth, String cardExpirationYear, String cvv, Boolean isLocked, Balance balance) {
         this.cardNumber = cardNumber;
         this.cardExpirationMonth = cardExpirationMonth;
         this.cardExpirationYear = cardExpirationYear;
         this.cvv = cvv;
         this.isLocked = isLocked;
+        this.client = client;
+        this.balance = balance;
     }
 
     public Long getId() {
@@ -95,6 +100,14 @@ public class CreditCard {
 
     public void setLocked(Boolean locked) {
         isLocked = locked;
+    }
+
+    public Balance getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Balance balance) {
+        this.balance = balance;
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.epam.services.classes;
 
 import com.epam.encrypting.Encryptor;
 import com.epam.models.Client;
-import com.epam.repositories.classes.ClientRepositoryImpl;
 import com.epam.repositories.interfaces.IClientRepository;
 import com.epam.services.interfaces.ILoginService;
 import org.slf4j.Logger;
@@ -20,8 +19,18 @@ public class LoginService implements ILoginService {
     @Override
     public Client loginClient(String login, String password) {
         String encryptedPassword = Encryptor.encryptSHA256(password);
-        Client client = clientRepository.findAllByLogin(login);
-        if (client.getPassword().trim().equals(encryptedPassword)) return client;
-        else return null;
+        Client client = clientRepository.findByLogin(login);
+        if (client.getPassword().trim().equals(encryptedPassword)) {
+            LOGGER.info("Password for client with login '{}' is match.", login);
+            return client;
+        } else {
+            LOGGER.info("Password for client with login '{}' doesn't match.", login);
+            return null;
+        }
+    }
+
+    @Override
+    public Boolean loginExist(String login) {
+        return clientRepository.findByLogin(login) != null;
     }
 }

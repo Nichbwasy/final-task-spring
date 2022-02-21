@@ -1,8 +1,11 @@
 package com.epam.models;
 
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+
 import javax.persistence.*;
 
 @Entity(name = "blocking_request")
+@EnableAutoConfiguration
 public class BlockingRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
