@@ -1,13 +1,14 @@
 package com.epam.models;
 
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity(name = "credit_cards")
-@EnableAutoConfiguration
+@Getter @Setter @NoArgsConstructor @ToString
 public class CreditCard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,89 +37,18 @@ public class CreditCard {
     @JoinColumn(name = "balance_id", referencedColumnName = "id")
     private Balance balance;
 
-    public Client getClient() {
-        return client;
-    }
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private Client user;
 
-    public void setClient(Client client) {
-        this.client = client;
-    }
-
-
-    public CreditCard() {
-    }
-
-    public CreditCard(Client client, String cardNumber, String cardExpirationMonth, String cardExpirationYear, String cvv, Boolean isLocked, Balance balance) {
+    public CreditCard(Client user, String cardNumber, String cardExpirationMonth, String cardExpirationYear, String cvv, Boolean isLocked, Balance balance) {
         this.cardNumber = cardNumber;
         this.cardExpirationMonth = cardExpirationMonth;
         this.cardExpirationYear = cardExpirationYear;
         this.cvv = cvv;
         this.isLocked = isLocked;
-        this.client = client;
+        this.user = user;
         this.balance = balance;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getCardNumber() {
-        return cardNumber;
-    }
-
-    public void setCardNumber(String cardNumber) {
-        this.cardNumber = cardNumber;
-    }
-
-    public String getCardExpirationMonth() {
-        return cardExpirationMonth;
-    }
-
-    public void setCardExpirationMonth(String cardExpirationMonth) {
-        this.cardExpirationMonth = cardExpirationMonth;
-    }
-
-    public String getCardExpirationYear() {
-        return cardExpirationYear;
-    }
-
-    public void setCardExpirationYear(String cardExpirationYear) {
-        this.cardExpirationYear = cardExpirationYear;
-    }
-
-    public String getCvv() {
-        return cvv;
-    }
-
-    public void setCvv(String cvv) {
-        this.cvv = cvv;
-    }
-
-    public Boolean getLocked() {
-        return isLocked;
-    }
-
-    public void setLocked(Boolean locked) {
-        isLocked = locked;
-    }
-
-    public Balance getBalance() {
-        return balance;
-    }
-
-    public void setBalance(Balance balance) {
-        this.balance = balance;
-    }
-
-    @Override
-    public String toString() {
-        return "CreditCard{" +
-                "id=" + id +
-                ", cardNumber='" + cardNumber.trim() + '\'' +
-                ", cardExpirationMonth='" + cardExpirationMonth.trim() + '\'' +
-                ", cardExpirationYear='" + cardExpirationYear.trim() + '\'' +
-                ", cvv='" + cvv.trim() + '\'' +
-                ", isLocked=" + isLocked +
-                '}';
-    }
 }

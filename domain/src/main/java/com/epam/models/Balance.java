@@ -1,12 +1,15 @@
 package com.epam.models;
 
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity(name = "balances")
-@EnableAutoConfiguration
+@Getter @Setter @NoArgsConstructor @ToString
 public class Balance {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,38 +21,7 @@ public class Balance {
     @OneToOne(mappedBy = "balance")
     private CreditCard creditCard;
 
-    protected Balance() {
-    }
-
     public Balance(BigDecimal amount) {
         this.amount = amount;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public CreditCard getCreditCard() {
-        return creditCard;
-    }
-
-    public void setCreditCard(CreditCard creditCard) {
-        this.creditCard = creditCard;
-    }
-
-    @Override
-    public String toString() {
-        return "Balance{" +
-                "id=" + id +
-                ", amount=" + amount +
-                '}';
     }
 }

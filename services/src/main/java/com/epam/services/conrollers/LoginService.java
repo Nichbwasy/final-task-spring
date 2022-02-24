@@ -1,8 +1,8 @@
-package com.epam.services.interfaces;
+package com.epam.services.conrollers;
 
 import com.epam.models.Client;
 
-public interface ILoginService {
+public interface LoginService {
     Boolean loginExist(String login);
     Client loginClient(String login, String password);
 }

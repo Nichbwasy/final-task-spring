@@ -1,19 +1,17 @@
 package com.epam.controllers.main;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+@Slf4j
 @Controller
 public class IndexController {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(IndexController.class);
-
     @GetMapping("/")
     public String index(Model model) {
-        LOGGER.debug("Page 'index.html' is loading...");
+        log.debug("Page 'index.html' is loading...");
         return "index";
     }
 }

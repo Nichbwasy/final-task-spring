@@ -1,135 +1,83 @@
 package com.epam.models;
 
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity(name = "clients")
-@EnableAutoConfiguration
+@Getter @Setter @NoArgsConstructor @ToString
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "login", unique = true, length = 64, nullable = false)
-    private String login;
+    @NotNull(message = "This field is compulsory ")
+    @Column(name = "username", unique = true, length = 64, nullable = false)
+    private String username;
 
+    @NotNull(message = "This field is compulsory ")
+    @Length(min = 5, message = "Password should be at least 5 symbols!")
     @Column(name = "password", nullable = false)
     private String password;
 
+    @NotNull(message = "This field is compulsory ")
+    @Email(message = "Email isn't valid")
     @Column(name = "email", unique = true, length = 64, nullable = false)
     private String email;
 
-    @Column(name = "first_name", nullable = false)
+    @NotNull(message = "This field is compulsory ")
+    @Column(name = "first_name", length = 64, nullable = false)
     private String firstName;
 
-    @Column(name = "last_name", nullable = false)
+    @NotNull(message = "This field is compulsory ")
+    @Column(name = "last_name", length = 64, nullable = false)
     private String lastName;
 
-    @Column(name = "role", nullable = false, columnDefinition = "integer default 0")
-    private Integer role;
+    @Column(name = "enabled", nullable = false, columnDefinition="boolean default true")
+    private Boolean enabled;
 
     @OneToMany(mappedBy = "client", targetEntity = CreditCard.class, cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
     private List<CreditCard> creditCards;
 
-    protected Client() {
-    }
+    @ManyToMany
+    @JoinTable(name = "clients_roles",
+            joinColumns = @JoinColumn(name =  "client_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    @ToString.Exclude
+    private Collection<Role> roles;
 
-    public Client(String login, String password, String email, String firstName, String lastName, Integer role) {
-        this.login = login;
+    public Client(String username, String password, String email, String firstName, String lastName, Role role) {
+        this.username = username;
         this.password = password;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.role = role;
         this.creditCards = new ArrayList<>();
+        this.enabled = true;
+        this.roles = new ArrayList<>();
+        this.roles.add(role);
     }
 
-    public Client(Long id, String login, String password, String email, String firstName, String lastName, Integer role) {
+    public Client(Long id, String login, String password, String email, String firstName, String lastName) {
         this.id = id;
-        this.login = login;
+        this.username = login;
         this.password = password;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.role = role;
         this.creditCards = new ArrayList<>();
+        this.enabled = true;
+        this.roles = new ArrayList<>();
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public Integer getRole() {
-        return role;
-    }
-
-    public void setRole(Integer role) {
-        this.role = role;
-    }
-
-    public List<CreditCard> getCreditCards() {
-        return creditCards;
-    }
-
-    public void setCreditCards(List<CreditCard> creditCards) {
-        this.creditCards = creditCards;
-    }
-
-    @Override
-    public String toString() {
-        return "Client{" +
-                "id=" + id +
-                ", login='" + login.trim() + '\'' +
-                ", password='" + password.trim() + '\'' +
-                ", email='" + email.trim() + '\'' +
-                ", firstName='" + firstName.trim() + '\'' +
-                ", lastName='" + lastName.trim() + '\'' +
-                ", role=" + role +
-                '}';
-    }
-
-
 }

@@ -1,44 +1,28 @@
 package com.epam.models;
 
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
 @Entity(name = "blocking_request")
-@EnableAutoConfiguration
+@Getter @Setter @NoArgsConstructor @ToString
 public class BlockingRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "type", nullable = false)
-    private Integer type;
+    @Column(name = "card_number", nullable = false, length = 16)
+    private String cardNumber;
 
-    protected BlockingRequest() {
-    }
+    @Column(name = "type", nullable = false, length = 32)
+    private String type;
 
-    public BlockingRequest(CreditCard creditCard, Integer type) {
-        //this.creditCard = creditCard;
+    public BlockingRequest(String cardNumber, String type) {
+        this.cardNumber = cardNumber;
         this.type = type;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
-    }
-
-    @Override
-    public String toString() {
-        return "BlockingRequest{" +
-                "id=" + id +
-                ", type=" + type +
-                '}';
-    }
 }

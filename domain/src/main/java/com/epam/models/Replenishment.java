@@ -1,12 +1,16 @@
 package com.epam.models;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity(name = "replenishments")
-@EnableAutoConfiguration
+@Getter @Setter @NoArgsConstructor @ToString
 public class Replenishment {
 
     @Id
@@ -19,40 +23,9 @@ public class Replenishment {
     @Column(name = "amount", nullable = false)
     private BigDecimal amount;
 
-    protected Replenishment() {
-    }
-
     public Replenishment(String cardNumber, BigDecimal amount) {
         this.cardNumber = cardNumber;
         this.amount = amount;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getCardNumber() {
-        return cardNumber;
-    }
-
-    public void setCardNumber(String cardNumber) {
-        this.cardNumber = cardNumber;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    @Override
-    public String toString() {
-        return "Replenishment{" +
-                "id=" + id +
-                ", cardNumber='" + cardNumber.trim() + '\'' +
-                ", amount=" + amount +
-                '}';
-    }
 }

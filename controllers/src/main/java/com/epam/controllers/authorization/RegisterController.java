@@ -1,50 +1,63 @@
 package com.epam.controllers.authorization;
 
 import com.epam.models.Client;
-import com.epam.services.classes.RegistrationService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.epam.security.encode.EncoderGenerator;
+import com.epam.services.conrollers.RegistrationService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
+
+@Slf4j
 @Controller
 @SessionAttributes("client")
 public class RegisterController {
-
-    private final static Logger LOGGER = LoggerFactory.getLogger(RegisterController.class);
-
     @Autowired
     private RegistrationService registrationService;
 
     @GetMapping("/register")
-    public String register(Model model) {
-        return "register";
+    public ModelAndView register(Model model) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("client", new Client());
+        modelAndView.setViewName("register");
+        return modelAndView;
     }
 
-    @PostMapping("/register/registration")
-    public String registration(@RequestParam("login") String login,
-                               @RequestParam("password") String password,
-                               @RequestParam("repeat_password") String repeatPassword,
-                               @RequestParam("email") String email,
-                               @RequestParam("first_name") String firstName,
-                               @RequestParam("last_name") String lastName,
-                               Model model
-    ) {
-        if(registrationService.loginIsFree(login)) {
-            if (registrationService.emailIsFree(email)) {
-                Client client = registrationService.registerClient(login, password, email, firstName, lastName);
-                if (client != null) {
-                    model.addAttribute("client", client);
-                    LOGGER.info("New client '{}' has been registered in a system.", client);
-                    return "redirect:/cards";
-                } else LOGGER.warn("Something went wrong while register a new client!");
-            } else LOGGER.warn("Client with email '{}' already exist!", email);
-        } else LOGGER.warn("Client with login '{}' already exist!", login);
-        return "redirect:/";
+    @PostMapping("/register")
+    public ModelAndView registration(@RequestParam(name = "repeat_password") String repeatPassword, @Valid Client client, BindingResult bindingResult, ModelMap modelMap) {
+        ModelAndView modelAndView = new ModelAndView();
+        if(bindingResult.hasErrors()) {
+            modelAndView.addObject("successMessage", "Please, correct data in form!");
+            modelMap.addAttribute("bindingResult", bindingResult);
+            log.warn("Some data doesn't pass validation!");
+        } else if (!registrationService.usernameIsFree(client.getUsername())) {
+            modelAndView.addObject("successMessage", String.format("Client with login '%s' already exist!", client.getUsername()));
+            log.warn("Client with login '{}' already exist!", client.getUsername());
+        } else if (!registrationService.emailIsFree(client.getEmail())) {
+            modelAndView.addObject("successMessage", String.format("Email '%s' already exist!", client.getEmail()));
+            log.warn("Email '{}' already exist!", client.getEmail());
+        } else if (!client.getPassword().equals(repeatPassword)) {
+            modelAndView.addObject("successMessage", "Passwords doesn't match!");
+            log.warn("Passwords doesn't match!");
+        } else {
+            client.setPassword(EncoderGenerator.generateBCryptEncoder().encode(client.getPassword()));
+            client = registrationService.registerClient(client);
+            if (client != null) {
+                modelAndView.addObject("successMessage", "The client was registered!");
+                log.info("The client '{}' was registered!", client);
+            } else {
+                modelAndView.addObject("successMessage", "Something went wrong! Can't register a client!");
+                log.error("Something went wrong! Can't register a client!");
+            }
+        }
+        modelAndView.addObject("client", new Client());
+        modelAndView.setViewName("register");
+        return modelAndView;
     }
 }

@@ -1,19 +1,17 @@
 package com.epam.controllers.main;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+@Slf4j
 @Controller
 public class ServicesController {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(ServicesController.class);
-
     @GetMapping("/services")
     public String services(Model model) {
-        LOGGER.debug("Page 'services.html' is loading...");
+        log.debug("Page 'services.html' is loading...");
         return "services";
     }
 }
