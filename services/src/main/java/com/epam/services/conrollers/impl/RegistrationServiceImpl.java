@@ -3,7 +3,7 @@ package com.epam.services.conrollers.impl;
 import com.epam.models.Client;
 import com.epam.models.Role;
 import com.epam.repositories.RoleRepository;
-import com.epam.repositories.UserRepository;
+import com.epam.repositories.ClientRepository;
 import com.epam.services.conrollers.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import java.util.Collection;
 public class RegistrationServiceImpl implements RegistrationService {
 
     @Autowired
-    private UserRepository clientRepository;
+    private ClientRepository clientRepository;
     @Autowired
     private RoleRepository roleRepository;
 

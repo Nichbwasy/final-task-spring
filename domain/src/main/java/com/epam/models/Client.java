@@ -34,7 +34,7 @@ public class Client {
     @Column(name = "email", unique = true, length = 64, nullable = false)
     private String email;
 
-    @NotNull(message = "This field is compulsory ")
+    @NotNull(message = "This field is compulsory")
     @Column(name = "first_name", length = 64, nullable = false)
     private String firstName;
 
@@ -45,7 +45,7 @@ public class Client {
     @Column(name = "enabled", nullable = false, columnDefinition="boolean default true")
     private Boolean enabled;
 
-    @OneToMany(mappedBy = "client", targetEntity = CreditCard.class, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "client", targetEntity = CreditCard.class, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @ToString.Exclude
     private List<CreditCard> creditCards;
 

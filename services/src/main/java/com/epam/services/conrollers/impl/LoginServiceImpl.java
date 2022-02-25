@@ -1,7 +1,7 @@
 package com.epam.services.conrollers.impl;
 
 import com.epam.models.Client;
-import com.epam.repositories.UserRepository;
+import com.epam.repositories.ClientRepository;
 import com.epam.services.conrollers.LoginService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +13,7 @@ public class LoginServiceImpl implements LoginService {
     private final static Logger LOGGER = LoggerFactory.getLogger(LoginServiceImpl.class);
 
     @Autowired
-    private UserRepository clientRepository;
+    private ClientRepository clientRepository;
 
     @Override
     public Client loginClient(String login, String password) {

@@ -2,7 +2,7 @@ package com.epam.services.security;
 
 import com.epam.models.Client;
 import com.epam.models.Role;
-import com.epam.repositories.UserRepository;
+import com.epam.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class UserSecurityService implements UserDetailsService {
 
     @Autowired
-    private UserRepository userRepository;
+    private ClientRepository userRepository;
 
     public Client findUserByUsername(String username) {
         return userRepository.getByUsername(username);

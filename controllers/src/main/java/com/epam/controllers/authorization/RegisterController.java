@@ -16,13 +16,12 @@ import javax.validation.Valid;
 
 @Slf4j
 @Controller
-@SessionAttributes("client")
 public class RegisterController {
     @Autowired
     private RegistrationService registrationService;
 
     @GetMapping("/register")
-    public ModelAndView register(Model model) {
+    public ModelAndView register() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("client", new Client());
         modelAndView.setViewName("register");
@@ -30,7 +29,11 @@ public class RegisterController {
     }
 
     @PostMapping("/register")
-    public ModelAndView registration(@RequestParam(name = "repeat_password") String repeatPassword, @Valid Client client, BindingResult bindingResult, ModelMap modelMap) {
+    public ModelAndView registration(@RequestParam(name = "repeat_password") String repeatPassword,
+                                     @Valid Client client,
+                                     BindingResult bindingResult,
+                                     ModelMap modelMap)
+    {
         ModelAndView modelAndView = new ModelAndView();
         if(bindingResult.hasErrors()) {
             modelAndView.addObject("successMessage", "Please, correct data in form!");
@@ -51,6 +54,8 @@ public class RegisterController {
             if (client != null) {
                 modelAndView.addObject("successMessage", "The client was registered!");
                 log.info("The client '{}' was registered!", client);
+                modelAndView.setViewName("/");
+                return modelAndView;
             } else {
                 modelAndView.addObject("successMessage", "Something went wrong! Can't register a client!");
                 log.error("Something went wrong! Can't register a client!");

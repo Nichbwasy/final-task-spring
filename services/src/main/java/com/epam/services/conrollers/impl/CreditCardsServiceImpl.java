@@ -4,23 +4,21 @@ import com.epam.models.Balance;
 import com.epam.models.Client;
 import com.epam.models.CreditCard;
 import com.epam.repositories.BalanceRepository;
-import com.epam.repositories.UserRepository;
+import com.epam.repositories.ClientRepository;
 import com.epam.repositories.CreditCardRepository;
 import com.epam.services.conrollers.CreditCardsService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.List;
 
+@Slf4j
 @Service
 public class CreditCardsServiceImpl implements CreditCardsService {
-    private final static Logger LOGGER = LoggerFactory.getLogger(CreditCardsServiceImpl.class);
 
     @Autowired
-    private UserRepository userRepository;
+    private ClientRepository clientRepository;
 
     @Autowired
     private CreditCardRepository creditCardRepository;
@@ -29,33 +27,27 @@ public class CreditCardsServiceImpl implements CreditCardsService {
     private BalanceRepository balanceRepository;
 
     @Override
-    public Client refreshClient(Client user) {
-        if (user != null) {
-            user = userRepository.getByUsername(user.getUsername());
-            LOGGER.info("The user '{}' has been refreshed!", user);
-            return user;
-        } else {
-            LOGGER.warn("Can't refresh a user 'case he is null!");
-            return null;
-        }
+    public Client getClientByUserName(String username) {
+        return clientRepository.getByUsername(username);
     }
 
     @Override
-    public List<CreditCard> getUpdatedClientCreditCards(Client client) {
-        Client updatedClient = userRepository.getByUsername(client.getUsername());
-        return updatedClient.getCreditCards();
+    public Boolean creditCardNumberIsFree(String cardNumber) {
+        return creditCardRepository.getByCardNumber(cardNumber) == null;
     }
 
     @Override
-    public Boolean addCreditCardToClient(Client user, String cardNumber, String expirationCardMonth, String expirationCardYear, String cvv) {
+    public Boolean addCreditCardToClient(Client client, CreditCard creditCard) {
         Balance balance = new Balance(new BigDecimal(0));
-        CreditCard creditCard = new CreditCard(user, cardNumber, expirationCardMonth, expirationCardYear, cvv, false, balance);
+        creditCard.setIsLocked(false);
+        creditCard.setBalance(balance);
+        creditCard.setClient(client);
         creditCard = creditCardRepository.save(creditCard);
         if (creditCard != null) {
-            LOGGER.info("New credit card '{}' for the user '{}' has been created.", creditCard, user);
+            log.info("New credit card '{}' for the client '{}' has been created.", creditCard, client);
             return true;
         } else {
-            LOGGER.warn("Something went wrong while creation a credit card for the user '{}'", user);
+            log.warn("Something went wrong while creation a credit card for the client '{}'", client);
             return false;
         }
     }

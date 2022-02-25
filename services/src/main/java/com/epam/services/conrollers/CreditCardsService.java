@@ -6,7 +6,7 @@ import com.epam.models.CreditCard;
 import java.util.List;
 
 public interface CreditCardsService {
-    Client refreshClient(Client user);
-    List<CreditCard> getUpdatedClientCreditCards(Client user);
-    Boolean addCreditCardToClient(Client user, String cardNumber, String expirationCardMonth, String expirationCardYear, String cvv);
+    Client getClientByUserName(String username);
+    Boolean creditCardNumberIsFree(String cardNumber);
+    Boolean addCreditCardToClient(Client user, CreditCard creditCard);
 }

@@ -7,13 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
 import java.security.Principal;
 
 @Slf4j
 @Controller
-@SessionAttributes("client")
 public class CardsController {
 
     @Autowired
@@ -21,13 +19,12 @@ public class CardsController {
 
     @RequestMapping("/cards")
     public String cards(Principal principal, Model model) {
-        System.out.println("Current user is: " + principal.getName());
-        Client user = (Client) model.getAttribute("user");
-        log.debug("Client '{}' going to refresh.", user);
-        if (user != null) {
-            log.debug("Client '{}' was refreshed.", user);
-            user = creditCardsService.refreshClient(user);
-            model.addAttribute("user", user);
+        System.out.println("Current client is: " + principal.getName());
+
+        Client client = creditCardsService.getClientByUserName(principal.getName());
+        if (client != null) {
+            log.debug("Client '{}' was got from credit cards services.", client);
+            model.addAttribute("client", client);
         }
         log.debug("Page 'cards.html' is loading...");
         return "cards";
