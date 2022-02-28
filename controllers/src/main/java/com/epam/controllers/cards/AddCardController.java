@@ -43,7 +43,7 @@ public class AddCardController {
         Client client = creditCardsService.getClientByUserName(principal.getName());
         if (client != null) {
             if(bindingResult.hasErrors()) {
-                modelAndView.addObject("successMessage", "Please, correct data in form!");
+                modelAndView.addObject("successesMessage", "Please, correct data in form!");
                 modelMap.addAttribute("bindingResult", bindingResult);
                 log.warn("Some data doesn't pass validation!");
             } else if (creditCardsService.creditCardNumberIsFree(creditCard.getCardNumber())) {
@@ -55,7 +55,7 @@ public class AddCardController {
                     log.warn("Can't add credit card to client!");
                 }
             } else {
-                modelAndView.addObject("successMessage", String.format("Card with number '%s' already exists!", creditCard.getCardNumber()));
+                modelAndView.addObject("successesMessage", String.format("Card with number '%s' already exists!", creditCard.getCardNumber()));
             }
             modelMap.addAttribute("client", client);
         }

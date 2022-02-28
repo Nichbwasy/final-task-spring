@@ -26,9 +26,4 @@ public class LoginServiceImpl implements LoginService {
             return null;
         }
     }
-
-    @Override
-    public Boolean loginExist(String login) {
-        return clientRepository.getByUsername(login) != null;
-    }
 }

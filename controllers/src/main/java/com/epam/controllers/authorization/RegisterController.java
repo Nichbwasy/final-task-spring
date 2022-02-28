@@ -36,28 +36,28 @@ public class RegisterController {
     {
         ModelAndView modelAndView = new ModelAndView();
         if(bindingResult.hasErrors()) {
-            modelAndView.addObject("successMessage", "Please, correct data in form!");
+            modelAndView.addObject("successesMessage", "Please, correct data in form!");
             modelMap.addAttribute("bindingResult", bindingResult);
             log.warn("Some data doesn't pass validation!");
         } else if (!registrationService.usernameIsFree(client.getUsername())) {
-            modelAndView.addObject("successMessage", String.format("Client with login '%s' already exist!", client.getUsername()));
+            modelAndView.addObject("successesMessage", String.format("Client with login '%s' already exist!", client.getUsername()));
             log.warn("Client with login '{}' already exist!", client.getUsername());
         } else if (!registrationService.emailIsFree(client.getEmail())) {
-            modelAndView.addObject("successMessage", String.format("Email '%s' already exist!", client.getEmail()));
+            modelAndView.addObject("successesMessage", String.format("Email '%s' already exist!", client.getEmail()));
             log.warn("Email '{}' already exist!", client.getEmail());
         } else if (!client.getPassword().equals(repeatPassword)) {
-            modelAndView.addObject("successMessage", "Passwords doesn't match!");
+            modelAndView.addObject("successesMessage", "Passwords doesn't match!");
             log.warn("Passwords doesn't match!");
         } else {
             client.setPassword(EncoderGenerator.generateBCryptEncoder().encode(client.getPassword()));
             client = registrationService.registerClient(client);
             if (client != null) {
-                modelAndView.addObject("successMessage", "The client was registered!");
+                modelAndView.addObject("successesMessage", "The client was registered!");
                 log.info("The client '{}' was registered!", client);
                 modelAndView.setViewName("/");
                 return modelAndView;
             } else {
-                modelAndView.addObject("successMessage", "Something went wrong! Can't register a client!");
+                modelAndView.addObject("successesMessage", "Something went wrong! Can't register a client!");
                 log.error("Something went wrong! Can't register a client!");
             }
         }
