@@ -2,6 +2,8 @@ package com.epam.controllers.transaction;
 
 import com.epam.models.Client;
 import com.epam.models.CreditCard;
+import com.epam.services.conrollers.ClientService;
+import com.epam.services.conrollers.CreditCardsService;
 import com.epam.services.conrollers.TransactionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +24,18 @@ import java.security.Principal;
 public class TransactionController {
 
     @Autowired
+    private ClientService clientService;
+
+    @Autowired
+    private CreditCardsService creditCardsService;
+
+    @Autowired
     private TransactionService transactionService;
 
     @GetMapping("/cards/transaction")
     public ModelAndView transaction(Principal principal) {
         ModelAndView modelAndView = new ModelAndView();
-        Client client = transactionService.getClientByUsername(principal.getName());
+        Client client = clientService.getClientByUsername(principal.getName());
         modelAndView.addObject("client", client);
         modelAndView.addObject("creditCard", new CreditCard());
         modelAndView.setViewName("transaction");
@@ -43,7 +51,7 @@ public class TransactionController {
                                       ModelMap modelMap
     ) {
         ModelAndView modelAndView = new ModelAndView();
-        Client client = transactionService.getClientByUsername(principal.getName());
+        Client client = clientService.getClientByUsername(principal.getName());
         modelAndView.addObject("client", client);
         if (bindingResult.hasErrors()) {
             modelAndView.addObject("successMessage", "Please, correct data in form!");
@@ -51,10 +59,10 @@ public class TransactionController {
             log.warn("Some data doesn't pass validation!");
         } else {
             if (client.getCreditCards().stream().anyMatch(card -> card.getCardNumber().equals(creditCard.getCardNumber()))) {
-                CreditCard senderCard = transactionService.getCreditCardByCardNumber(creditCard.getCardNumber());
+                CreditCard senderCard = creditCardsService.getCreditCardByCardNumber(creditCard.getCardNumber());
                 BigDecimal amountToSend = new BigDecimal(amount);
                 if (senderCard.getBalance().getAmount().compareTo(amountToSend) >= 0) {
-                    if (transactionService.creditCardAlreadyExist(recipientCardNumber)) {
+                    if (creditCardsService.creditCardAlreadyExist(recipientCardNumber)) {
                         if (transactionService.startTransaction(senderCard.getCardNumber(), recipientCardNumber, amountToSend)) {
 
                             log.info("Transaction between '{}' and '{}' on amount {} has been completed successfully.", creditCard.getCardNumber(), recipientCardNumber, amount);

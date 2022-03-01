@@ -1,7 +1,7 @@
 package com.epam.controllers.cards;
 
 import com.epam.models.Client;
-import com.epam.services.conrollers.CreditCardsService;
+import com.epam.services.conrollers.ClientService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,13 +15,13 @@ import java.security.Principal;
 public class CardsController {
 
     @Autowired
-    private CreditCardsService creditCardsService;
+    private ClientService clientService;
 
     @RequestMapping("/cards")
     public String cards(Principal principal, Model model) {
         System.out.println("Current client is: " + principal.getName());
 
-        Client client = creditCardsService.getClientByUserName(principal.getName());
+        Client client = clientService.getClientByUsername(principal.getName());
         if (client != null) {
             log.debug("Client '{}' was got from credit cards services.", client);
             model.addAttribute("client", client);

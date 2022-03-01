@@ -7,8 +7,11 @@ import lombok.ToString;
 
 import javax.persistence.*;
 
+@Setter
+@Getter
+@ToString
+@NoArgsConstructor
 @Entity(name = "roles")
-@Getter @Setter @NoArgsConstructor @ToString
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

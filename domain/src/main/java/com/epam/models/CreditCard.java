@@ -9,8 +9,11 @@ import org.hibernate.validator.constraints.Length;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+@Setter
+@Getter
+@ToString
+@NoArgsConstructor
 @Entity(name = "credit_cards")
-@Getter @Setter @NoArgsConstructor @ToString
 public class CreditCard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

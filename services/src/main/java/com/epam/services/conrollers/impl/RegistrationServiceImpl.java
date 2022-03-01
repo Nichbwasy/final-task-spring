@@ -8,6 +8,7 @@ import com.epam.services.conrollers.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -19,6 +20,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Transactional
     @Override
     public Client registerClient(Client client) {
         Collection<Role> clientRoles = new ArrayList<>();
@@ -26,15 +28,5 @@ public class RegistrationServiceImpl implements RegistrationService {
         client.setEnabled(true);
         client.setRoles(clientRoles);
         return clientRepository.save(client);
-    }
-
-    @Override
-    public Boolean usernameIsFree(String login) {
-        return clientRepository.getByUsername(login) == null;
-    }
-
-    @Override
-    public Boolean emailIsFree(String email) {
-        return clientRepository.getByUsername(email) == null;
     }
 }

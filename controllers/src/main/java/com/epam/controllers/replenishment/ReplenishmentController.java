@@ -2,6 +2,8 @@ package com.epam.controllers.replenishment;
 
 import com.epam.models.Client;
 import com.epam.models.CreditCard;
+import com.epam.services.conrollers.ClientService;
+import com.epam.services.conrollers.CreditCardsService;
 import com.epam.services.conrollers.ReplenishmentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +24,18 @@ import java.security.Principal;
 public class ReplenishmentController {
 
     @Autowired
+    private ClientService clientService;
+
+    @Autowired
+    private CreditCardsService creditCardsService;
+
+    @Autowired
     private ReplenishmentService replenishmentService;
 
     @GetMapping("/cards/replenishment")
     public ModelAndView replenishment(Principal principal) {
         ModelAndView modelAndView = new ModelAndView();
-        Client client = replenishmentService.getClientByUsername(principal.getName());
+        Client client = clientService.getClientByUsername(principal.getName());
         modelAndView.addObject("client", client);
         modelAndView.addObject("creditCard", new CreditCard());
         modelAndView.setViewName("replenishment");
@@ -42,7 +50,7 @@ public class ReplenishmentController {
                                       ModelMap modelMap
     ) {
         ModelAndView modelAndView = new ModelAndView();
-        Client client = replenishmentService.getClientByUsername(principal.getName());
+        Client client = clientService.getClientByUsername(principal.getName());
         if (client != null) {
             modelAndView.addObject("client", client);
             if(bindingResult.hasErrors()) {
@@ -50,7 +58,7 @@ public class ReplenishmentController {
                 modelMap.addAttribute("bindingResult", bindingResult);
                 log.warn("Some data doesn't pass validation!");
             } else{
-                CreditCard replenishmentCreditCard = replenishmentService.getCreditCardByCardNumber(creditCard.getCardNumber());
+                CreditCard replenishmentCreditCard = creditCardsService.getCreditCardByCardNumber(creditCard.getCardNumber());
                 if (replenishmentCreditCard.getCardExpirationMonth().equals(creditCard.getCardExpirationMonth())) {
                     if (replenishmentCreditCard.getCardExpirationYear().equals(creditCard.getCardExpirationYear())) {
                         if (replenishmentCreditCard.getCvv().equals(creditCard.getCvv())) {

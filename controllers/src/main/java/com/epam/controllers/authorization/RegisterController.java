@@ -2,11 +2,11 @@ package com.epam.controllers.authorization;
 
 import com.epam.models.Client;
 import com.epam.security.encode.EncoderGenerator;
+import com.epam.services.conrollers.ClientService;
 import com.epam.services.conrollers.RegistrationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +17,10 @@ import javax.validation.Valid;
 @Slf4j
 @Controller
 public class RegisterController {
+
+    @Autowired
+    private ClientService clientService;
+
     @Autowired
     private RegistrationService registrationService;
 
@@ -39,10 +43,10 @@ public class RegisterController {
             modelAndView.addObject("successesMessage", "Please, correct data in form!");
             modelMap.addAttribute("bindingResult", bindingResult);
             log.warn("Some data doesn't pass validation!");
-        } else if (!registrationService.usernameIsFree(client.getUsername())) {
+        } else if (!clientService.usernameIsFree(client.getUsername())) {
             modelAndView.addObject("successesMessage", String.format("Client with login '%s' already exist!", client.getUsername()));
             log.warn("Client with login '{}' already exist!", client.getUsername());
-        } else if (!registrationService.emailIsFree(client.getEmail())) {
+        } else if (!clientService.emailIsFree(client.getEmail())) {
             modelAndView.addObject("successesMessage", String.format("Email '%s' already exist!", client.getEmail()));
             log.warn("Email '{}' already exist!", client.getEmail());
         } else if (!client.getPassword().equals(repeatPassword)) {

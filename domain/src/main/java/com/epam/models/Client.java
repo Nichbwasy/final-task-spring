@@ -13,8 +13,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@Setter
+@Getter
+@ToString
+@NoArgsConstructor
 @Entity(name = "clients")
-@Getter @Setter @NoArgsConstructor @ToString
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

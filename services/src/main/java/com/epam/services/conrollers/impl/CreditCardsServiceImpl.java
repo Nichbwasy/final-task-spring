@@ -27,13 +27,13 @@ public class CreditCardsServiceImpl implements CreditCardsService {
     private BalanceRepository balanceRepository;
 
     @Override
-    public Client getClientByUserName(String username) {
-        return clientRepository.getByUsername(username);
+    public CreditCard getCreditCardByCardNumber(String cardNumber) {
+        return creditCardRepository.getByCardNumber(cardNumber);
     }
 
     @Override
-    public Boolean creditCardNumberIsFree(String cardNumber) {
-        return creditCardRepository.getByCardNumber(cardNumber) == null;
+    public Boolean creditCardAlreadyExist(String cardNumber) {
+        return creditCardRepository.getByCardNumber(cardNumber) != null;
     }
 
     @Override

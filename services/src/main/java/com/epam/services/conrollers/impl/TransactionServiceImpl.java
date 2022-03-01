@@ -34,21 +34,6 @@ public class TransactionServiceImpl implements TransactionService {
     private TransactionsRepository transactionsRepository;
 
     @Override
-    public Client getClientByUsername(String username) {
-        return clientRepository.getByUsername(username);
-    }
-
-    @Override
-    public CreditCard getCreditCardByCardNumber(String cardNumber) {
-        return creditCardRepository.getByCardNumber(cardNumber);
-    }
-
-    @Override
-    public Boolean creditCardAlreadyExist(String cardNumber) {
-        return creditCardRepository.getByCardNumber(cardNumber) != null;
-    }
-
-    @Override
     @Transactional
     public Boolean startTransaction(String senderCardNumber, String recipientCardNumber, BigDecimal amount) {
         CreditCard senderCard = creditCardRepository.getByCardNumber(senderCardNumber);

@@ -9,8 +9,11 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import javax.persistence.*;
 import java.math.BigDecimal;
 
+@Setter
+@Getter
+@ToString
+@NoArgsConstructor
 @Entity(name = "transactions")
-@Getter @Setter @NoArgsConstructor @ToString
 public class Transaction {
 
     @Id

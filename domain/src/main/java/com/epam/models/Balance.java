@@ -8,8 +8,11 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.math.BigDecimal;
 
+@Setter
+@Getter
+@ToString
+@NoArgsConstructor
 @Entity(name = "balances")
-@Getter @Setter @NoArgsConstructor @ToString
 public class Balance {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

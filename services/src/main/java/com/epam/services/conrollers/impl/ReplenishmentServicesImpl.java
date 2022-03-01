@@ -31,16 +31,6 @@ public class ReplenishmentServicesImpl implements ReplenishmentService {
     private ReplenishmentsRepository replenishmentsRepository;
 
     @Override
-    public Client getClientByUsername(String username) {
-        return clientRepository.getByUsername(username);
-    }
-
-    @Override
-    public CreditCard getCreditCardByCardNumber(String cardNumber) {
-        return creditCardRepository.getByCardNumber(cardNumber);
-    }
-
-    @Override
     @Transactional
     public Boolean balanceReplenishment(CreditCard creditCard, BigDecimal amount) {
         CreditCard replenishmentCreditCard = creditCardRepository.getByCardNumber(creditCard.getCardNumber());

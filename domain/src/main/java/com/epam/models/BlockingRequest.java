@@ -7,8 +7,11 @@ import lombok.ToString;
 
 import javax.persistence.*;
 
+@Setter
+@Getter
+@ToString
+@NoArgsConstructor
 @Entity(name = "blocking_request")
-@Getter @Setter @NoArgsConstructor @ToString
 public class BlockingRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
