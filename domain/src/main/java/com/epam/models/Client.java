@@ -1,10 +1,10 @@
 package com.epam.models;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.internal.util.stereotypes.Lazy;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -48,11 +48,12 @@ public class Client {
     @Column(name = "enabled", nullable = false, columnDefinition="boolean default true")
     private Boolean enabled;
 
-    @OneToMany(mappedBy = "client", targetEntity = CreditCard.class, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "client", targetEntity = CreditCard.class, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @ToString.Exclude
+    @JsonManagedReference
     private List<CreditCard> creditCards;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "clients_roles",
             joinColumns = @JoinColumn(name =  "client_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")

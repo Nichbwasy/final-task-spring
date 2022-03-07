@@ -1,17 +1,16 @@
-package com.epam.controllers.main;
+package com.epam.controllers.rest.home;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
-@Controller
+@RestController
 public class ContactController {
 
     @GetMapping("/contact")
-    public String contact(Model model) {
+    public String contact() {
         log.debug("Page 'contact.html' is loading...");
-        return "contact";
+        return "Hello, this is contact page!";
     }
 }

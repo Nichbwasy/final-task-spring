@@ -1,4 +1,4 @@
-package com.epam.controllers.authorization;
+package com.epam.controllers.rest.authorization;
 
 import com.epam.models.Client;
 import com.epam.security.encode.EncoderGenerator;
@@ -9,13 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 
 @Slf4j
-@Controller
+@RestController
 public class RegisterController {
 
     @Autowired

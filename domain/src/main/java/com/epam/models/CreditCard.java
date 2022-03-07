@@ -1,5 +1,7 @@
 package com.epam.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -42,15 +44,16 @@ public class CreditCard {
     @Column(name = "locked", columnDefinition = "boolean default false")
     private Boolean isLocked;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @JoinColumn(name = "client_id")
+    @JsonBackReference
+    private Client client;
+
     @OneToOne(cascade = CascadeType.ALL)
     @ToString.Exclude
     @JoinColumn(name = "balance_id", referencedColumnName = "id")
     private Balance balance;
-
-    @ManyToOne
-    @ToString.Exclude
-    @JoinColumn(name = "client_id")
-    private Client client;
 
     public CreditCard(Client client, String cardNumber, String cardExpirationMonth, String cardExpirationYear, String cvv, Boolean isLocked, Balance balance) {
         this.cardNumber = cardNumber;

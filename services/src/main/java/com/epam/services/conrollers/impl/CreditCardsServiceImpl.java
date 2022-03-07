@@ -10,8 +10,12 @@ import com.epam.services.conrollers.CreditCardsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -34,6 +38,26 @@ public class CreditCardsServiceImpl implements CreditCardsService {
     @Override
     public Boolean creditCardAlreadyExist(String cardNumber) {
         return creditCardRepository.getByCardNumber(cardNumber) != null;
+    }
+
+    @Override
+    @Transactional
+    public Boolean creditCardBelongClientCheck(Client client, String cardNumber) {
+        List<CreditCard> clientCards = creditCardRepository.findByClient(client);
+        return clientCards.stream().anyMatch(card -> card.getCardNumber().equals(cardNumber));
+    }
+
+    @Override
+    @Transactional
+    public Boolean deleteCreditCardFromClient(Client client, String cardNumber) {
+        CreditCard creditCardToDelete = creditCardRepository.getByCardNumber(cardNumber);
+        if (creditCardToDelete != null) {
+            creditCardRepository.deleteByCardNumber(cardNumber);
+            log.info("The credit card '{}' of the client '{}' has been removed!", cardNumber, client);
+            return true;
+        }
+        log.warn("The credit card '{}' not found!", cardNumber);
+        return false;
     }
 
     @Override

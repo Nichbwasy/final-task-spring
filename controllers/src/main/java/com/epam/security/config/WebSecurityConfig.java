@@ -18,17 +18,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
         http.authorizeRequests()
-                .antMatchers("/", "/about", "/contact", "/service", "/login*", "/register").permitAll()
-                .antMatchers("/cards/*").authenticated()
+                .antMatchers("/", "/about", "/contact", "/service", "/login", "/register", "/test").permitAll()
+                .antMatchers("/cards", "/cards/block/*", "/cards/replenishment", "/cards/transactions").authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login")
                 .defaultSuccessUrl("/cards", true)
                 .and()
                 .logout()
-                .logoutSuccessUrl("/");
+                .permitAll()
+                .logoutSuccessUrl("/")
+                .and()
+                .csrf().disable();
     }
 
     @Bean

@@ -1,17 +1,17 @@
-package com.epam.controllers.main;
+package com.epam.controllers.rest.home;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
-@Controller
+@RestController
 public class IndexController {
 
+
     @GetMapping("/")
-    public String index(Model model) {
+    public String index() {
         log.debug("Page 'index.html' is loading...");
-        return "index";
+        return "Hello, this is main page!";
     }
 }

@@ -21,9 +21,6 @@ public class Balance {
     @Column(name = "amount", columnDefinition="Decimal(10,2) default '0.00'")
     private BigDecimal amount = BigDecimal.ZERO;
 
-    @OneToOne(mappedBy = "balance")
-    private CreditCard creditCard;
-
     public Balance(BigDecimal amount) {
         this.amount = amount;
     }
