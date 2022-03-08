@@ -11,10 +11,14 @@ import com.epam.repositories.ReplenishmentsRepository;
 import com.epam.services.conrollers.ReplenishmentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.util.List;
 
 
 @Slf4j
@@ -31,6 +35,11 @@ public class ReplenishmentServicesImpl implements ReplenishmentService {
     private ReplenishmentsRepository replenishmentsRepository;
 
     @Override
+    public List<Replenishment> showReplenishmentHistory(Integer page) {
+        return replenishmentsRepository.findAll(PageRequest.of(page, 5)).toList();
+    }
+
+    @Override
     @Transactional
     public Boolean balanceReplenishment(CreditCard creditCard, BigDecimal amount) {
         CreditCard replenishmentCreditCard = creditCardRepository.getByCardNumber(creditCard.getCardNumber());
@@ -44,6 +53,27 @@ public class ReplenishmentServicesImpl implements ReplenishmentService {
             return true;
         } else {
             log.warn("Can't find credit card with number '{}'!", creditCard.getCardNumber());
+            return false;
+        }
+    }
+
+    @Override
+    @Transactional
+    public Boolean cancelOperation(Long id) {
+        Replenishment operation = replenishmentsRepository.getById(id);
+        CreditCard creditCard = creditCardRepository.getByCardNumber(operation.getCardNumber());
+        if (creditCard != null) {
+            Balance balance = creditCard.getBalance();
+            balance.setAmount(balance.getAmount().subtract(operation.getAmount()));
+            creditCard.setBalance(balance);
+            creditCardRepository.save(creditCard);
+            log.info("Replenishment operation on amount '{}' for the credit card '{}' was canceled."
+                    , operation.getAmount(), operation.getCardNumber());
+            replenishmentsRepository.delete(operation);
+            log.info("Replenishment record with id '{}' was removed.", id);
+            return true;
+        } else {
+            log.warn("Credit card '{}' not found!", operation.getCardNumber());
             return false;
         }
     }
