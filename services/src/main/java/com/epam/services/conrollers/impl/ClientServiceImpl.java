@@ -16,12 +16,12 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Boolean usernameIsFree(String login) {
-        return clientRepository.getByUsername(login) == null;
+        return !clientRepository.existsByUsername(login);
     }
 
     @Override
     public Boolean emailIsFree(String email) {
-        return clientRepository.getByEmail(email) == null;
+        return !clientRepository.existsByEmail(email);
     }
 
     @Override

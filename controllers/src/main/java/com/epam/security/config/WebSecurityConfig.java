@@ -1,5 +1,6 @@
 package com.epam.security.config;
 
+import com.epam.roles.Roles;
 import com.epam.security.encode.EncoderGenerator;
 import com.epam.services.security.UserSecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,10 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import javax.servlet.http.HttpServletResponse;
 
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -18,9 +22,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         http.authorizeRequests()
+                .antMatchers("/cards", "/cards/**").hasAuthority(Roles.CLIENT)
+                .antMatchers("/requests", "/requests/**", "/requests/1").hasAuthority(Roles.ADMINISTRATOR)
                 .antMatchers("/", "/about", "/contact", "/service", "/login", "/register", "/test").permitAll()
-                .antMatchers("/cards", "/cards/block/*", "/cards/replenishment", "/cards/transactions").authenticated()
+                .anyRequest().permitAll()
                 .and()
                 .formLogin()
                 .defaultSuccessUrl("/cards", true)

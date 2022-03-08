@@ -1,4 +1,4 @@
-package com.epam.controllers.rest.transaction;
+package com.epam.controllers.rest.cards.transaction;
 
 import com.epam.models.Balance;
 import com.epam.models.Client;

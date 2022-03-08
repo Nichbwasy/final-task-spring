@@ -1,4 +1,4 @@
-package com.epam.controllers.rest.replenishment;
+package com.epam.controllers.rest.cards.replenishment;
 
 import com.epam.models.Client;
 import com.epam.models.CreditCard;
