@@ -1,5 +1,6 @@
 package com.epam.services.conrollers;
 
+import com.epam.models.Client;
 import com.epam.models.CreditCard;
 import com.epam.models.Replenishment;
 
@@ -8,6 +9,6 @@ import java.util.List;
 
 public interface ReplenishmentService {
     List<Replenishment> showReplenishmentHistory(Integer page);
-    Boolean balanceReplenishment(CreditCard creditCard, BigDecimal amount);
+    Replenishment balanceReplenishment(Client client, CreditCard creditCard, String amount);
     Boolean cancelOperation(Long id);
 }

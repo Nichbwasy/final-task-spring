@@ -1,6 +1,7 @@
 package com.epam.services.conrollers;
 
 import com.epam.models.BlockingRequest;
+import com.epam.models.Client;
 
 import java.util.List;
 
@@ -10,5 +11,5 @@ public interface BlockingRequestService {
     Boolean requestAlreadyExist(Long id);
     Boolean acceptRequest(Long id);
     Boolean rejectRequest(Long id);
-    void sendRequest(String cardNumber);
+    BlockingRequest sendRequest(Client client, String cardNumber);
 }

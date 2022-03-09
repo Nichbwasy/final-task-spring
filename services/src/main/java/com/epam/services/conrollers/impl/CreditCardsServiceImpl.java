@@ -51,28 +51,33 @@ public class CreditCardsServiceImpl implements CreditCardsService {
     @Transactional
     public Boolean deleteCreditCardFromClient(Client client, String cardNumber) {
         CreditCard creditCardToDelete = creditCardRepository.getByCardNumber(cardNumber);
-        if (creditCardToDelete != null) {
-            creditCardRepository.deleteByCardNumber(cardNumber);
-            log.info("The credit card '{}' of the client '{}' has been removed!", cardNumber, client);
-            return true;
-        }
-        log.warn("The credit card '{}' not found!", cardNumber);
+        if (client.getCreditCards().stream().anyMatch(card -> card.getCardNumber().equals(cardNumber))) {
+            if (creditCardToDelete != null) {
+                creditCardRepository.deleteByCardNumber(cardNumber);
+                log.info("The credit card '{}' of the client '{}' has been removed!", cardNumber, client.getUsername());
+                return true;
+            }
+            log.warn("The credit card '{}' not found!", cardNumber);
+        } else log.warn("The credit card '{}' doesn't belong to the client '{}'.", cardNumber, client.getUsername());
         return false;
     }
 
     @Override
-    public Boolean addCreditCardToClient(Client client, CreditCard creditCard) {
-        Balance balance = new Balance(new BigDecimal(0));
-        creditCard.setIsLocked(false);
-        creditCard.setBalance(balance);
-        creditCard.setClient(client);
-        creditCard = creditCardRepository.save(creditCard);
-        if (creditCard != null) {
-            log.info("New credit card '{}' for the client '{}' has been created.", creditCard, client);
-            return true;
-        } else {
-            log.warn("Something went wrong while creation a credit card for the client '{}'", client);
-            return false;
+    public CreditCard addCreditCardToClient(Client client, CreditCard creditCard) {
+        if (!creditCardAlreadyExist(creditCard.getCardNumber())) {
+            Balance balance = new Balance(new BigDecimal(0));
+            creditCard.setIsLocked(false);
+            creditCard.setBalance(balance);
+            creditCard.setClient(client);
+            creditCard = creditCardRepository.save(creditCard);
+            if (creditCard != null) {
+                log.info("New credit card '{}' for the client '{}' has been created.", creditCard, client);
+                return creditCard;
+            } else {
+                log.warn("Something went wrong while creation a credit card for the client '{}'", client);
+                return null;
+            }
         }
+        return null;
     }
 }

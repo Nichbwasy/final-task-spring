@@ -41,19 +41,24 @@ public class ReplenishmentServicesImpl implements ReplenishmentService {
 
     @Override
     @Transactional
-    public Boolean balanceReplenishment(CreditCard creditCard, BigDecimal amount) {
-        CreditCard replenishmentCreditCard = creditCardRepository.getByCardNumber(creditCard.getCardNumber());
-        if (replenishmentCreditCard != null) {
-            Balance balance = replenishmentCreditCard.getBalance();
-            balance.setAmount(balance.getAmount().add(amount));
-            replenishmentCreditCard.setBalance(balance);
-            creditCardRepository.save(replenishmentCreditCard);
-            Replenishment replenishment = new Replenishment(replenishmentCreditCard.getCardNumber(), amount);
-            replenishmentsRepository.save(replenishment);
-            return true;
+    public Replenishment balanceReplenishment(Client client, CreditCard creditCard, String amount) {
+        if (validateFormData(client, creditCard)) {
+            CreditCard replenishmentCreditCard = creditCardRepository.getByCardNumber(creditCard.getCardNumber());
+            if (replenishmentCreditCard != null) {
+                Balance balance = replenishmentCreditCard.getBalance();
+                BigDecimal value = new BigDecimal(amount);
+                balance.setAmount(balance.getAmount().add(value));
+                replenishmentCreditCard.setBalance(balance);
+                creditCardRepository.save(replenishmentCreditCard);
+                Replenishment replenishment = new Replenishment(replenishmentCreditCard.getCardNumber(), value);
+                replenishment = replenishmentsRepository.save(replenishment);
+                return replenishment;
+            } else {
+                log.warn("Can't find credit card with number '{}'!", creditCard.getCardNumber());
+                return null;
+            }
         } else {
-            log.warn("Can't find credit card with number '{}'!", creditCard.getCardNumber());
-            return false;
+            return null;
         }
     }
 
@@ -76,5 +81,19 @@ public class ReplenishmentServicesImpl implements ReplenishmentService {
             log.warn("Credit card '{}' not found!", operation.getCardNumber());
             return false;
         }
+    }
+
+    private Boolean validateFormData(Client client, CreditCard cardData) {
+        if (client.getCreditCards().stream().anyMatch(card -> card.getCardNumber().equals(cardData.getCardNumber()))) {
+            CreditCard creditCard = creditCardRepository.getByCardNumber(cardData.getCardNumber());
+            if (creditCard.getCardExpirationMonth().equals(cardData.getCardExpirationMonth())){
+                if (creditCard.getCardExpirationYear().equals(cardData.getCardExpirationYear())) {
+                    if (creditCard.getCvv().equals(cardData.getCvv())) {
+                        return true;
+                    } else log.warn("Wrong CVV code!");
+                } else log.warn("Wrong expiration year!");
+            } else log.warn("Wrong expiration month!");
+        } else log.warn("The credit card '{}' doesn't belong to the client '{}'.", cardData.getCardNumber(), client.getUsername());
+        return false;
     }
 }

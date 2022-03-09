@@ -11,5 +11,6 @@ import java.util.List;
 public interface CreditCardRepository extends JpaRepository<CreditCard, Long> {
     CreditCard getByCardNumber(String cardNumber);
     List<CreditCard> findByClient(Client client);
+    Boolean existsByCardNumber(String cardNumber);
     void deleteByCardNumber(String cardNumber);
 }
