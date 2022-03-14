@@ -9,9 +9,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+
 @Slf4j
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
 public class LogInController {
 
     @Autowired
@@ -22,8 +24,8 @@ public class LogInController {
     private ClientService clientService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> generateToken(@RequestBody LoginFormDto loginForm) throws AuthenticationException {
-        return ResponseEntity.ok().body(null);
+    public ResponseEntity<?> generateToken(@RequestBody LoginFormDto formData) throws AuthenticationException {
+        return ResponseEntity.ok().body("You have been authorized!");
     }
 
     //! Test !

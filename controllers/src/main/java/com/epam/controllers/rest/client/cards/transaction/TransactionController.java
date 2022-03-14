@@ -8,6 +8,7 @@ import com.epam.services.conrollers.CreditCardsService;
 import com.epam.services.conrollers.TransactionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,10 +29,10 @@ public class TransactionController {
     private TransactionService transactionService;
 
     @PostMapping("/cards/transactions")
-    public Transaction transactionStart(@RequestBody TransactionFormDto transactionForm, Principal principal) {
+    public ResponseEntity<Transaction> transactionStart(@RequestBody TransactionFormDto transactionForm, Principal principal) {
         Client client = clientService.getClientByUsername(principal.getName());
-        return transactionService.startTransaction(client, transactionForm.getSenderCard(),
-                transactionForm.getRecipientCardNumber(), transactionForm.getAmount());
+        return ResponseEntity.ok().body(transactionService.startTransaction(client, transactionForm.getSenderCard(),
+                transactionForm.getRecipientCardNumber(), transactionForm.getAmount()));
     }
 
 }

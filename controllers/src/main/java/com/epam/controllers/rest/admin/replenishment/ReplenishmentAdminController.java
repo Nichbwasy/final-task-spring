@@ -4,11 +4,12 @@ import com.epam.models.Replenishment;
 import com.epam.services.conrollers.ReplenishmentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -17,13 +18,13 @@ public class ReplenishmentAdminController {
     private ReplenishmentService replenishmentService;
 
     @GetMapping("/replenishment/history/{page}")
-    public Map<Long, Replenishment> replenishment(@PathVariable Integer page) {
-        return replenishmentService.showReplenishmentHistory(page - 1).stream()
-                .collect(Collectors.toMap(Replenishment::getId, Function.identity()));
+    public ResponseEntity<List<Replenishment>> replenishment(@PathVariable Integer page) {
+        return ResponseEntity.ok().body(replenishmentService.showReplenishmentHistory(page - 1));
     }
 
     @GetMapping("/replenishment/history/undo/{id}")
-    public void replenishmentUndo(@PathVariable Long id) {
+    public ResponseEntity<?> replenishmentUndo(@PathVariable Long id) {
         replenishmentService.cancelOperation(id);
+        return ResponseEntity.ok().body(null);
     }
 }

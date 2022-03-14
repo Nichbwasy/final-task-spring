@@ -11,6 +11,7 @@ import com.epam.services.conrollers.CreditCardsService;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -33,32 +34,33 @@ public class CardsController {
     private BlockingRequestService blockingRequestService;
 
     @GetMapping("/cards")
-    public List<CreditCard> cards(Principal principal) {
+    public ResponseEntity<List<CreditCard>> cards(Principal principal) {
         Client client = clientService.getClientByUsername(principal.getName());
-        return client.getCreditCards();
+        return ResponseEntity.ok().body(client.getCreditCards());
     }
 
     @GetMapping("/cards/{cardNumber}")
-    public CreditCard card(@PathVariable String cardNumber, Principal principal) {
+    public ResponseEntity<CreditCard> card(@PathVariable String cardNumber, Principal principal) {
         Client client = clientService.getClientByUsername(principal.getName());
-        return clientService.getClientCreditCard(client, cardNumber);
+        return ResponseEntity.ok().body(clientService.getClientCreditCard(client, cardNumber));
     }
 
     @PostMapping("/cards")
-    public CreditCard save(@RequestBody CreditCard creditCard, Principal principal) {
+    public ResponseEntity<CreditCard> save(@RequestBody CreditCard creditCard, Principal principal) {
         Client client = clientService.getClientByUsername(principal.getName());
-        return creditCardsService.addCreditCardToClient(client, creditCard);
+        return ResponseEntity.ok().body(creditCardsService.addCreditCardToClient(client, creditCard));
     }
 
     @PostMapping("/cards/block/{cardNumber}")
-    public BlockingRequest blockCard(@PathVariable String cardNumber, Principal principal) {
+    public ResponseEntity<BlockingRequest> blockCard(@PathVariable String cardNumber, Principal principal) {
         Client client = clientService.getClientByUsername(principal.getName());
-        return blockingRequestService.sendRequest(client, cardNumber);
+        return ResponseEntity.ok().body(blockingRequestService.sendRequest(client, cardNumber));
     }
 
     @DeleteMapping("/cards/{cardNumber}")
-    public void delete(@PathVariable String cardNumber, Principal principal){
+    public ResponseEntity<?> delete(@PathVariable String cardNumber, Principal principal){
         Client client = clientService.getClientByUsername(principal.getName());
         creditCardsService.deleteCreditCardFromClient(client, cardNumber);
+        return ResponseEntity.ok().body(null);
     }
 }

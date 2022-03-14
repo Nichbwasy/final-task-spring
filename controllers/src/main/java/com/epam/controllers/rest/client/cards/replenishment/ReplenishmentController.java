@@ -9,6 +9,8 @@ import com.epam.services.conrollers.CreditCardsService;
 import com.epam.services.conrollers.ReplenishmentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,8 +35,9 @@ public class ReplenishmentController {
     private ReplenishmentService replenishmentService;
 
     @PostMapping("/cards/replenishment")
-    public Replenishment replenishmentStart(@RequestBody ReplenishmentFormDto formData, Principal principal) {
+    public ResponseEntity<Replenishment> replenishmentStart(@RequestBody ReplenishmentFormDto formData, Principal principal) {
         Client client = clientService.getClientByUsername(principal.getName());
-        return replenishmentService.balanceReplenishment(client, formData.getCreditCard(), formData.getAmount());
+        return ResponseEntity.ok()
+                .body(replenishmentService.balanceReplenishment(client, formData.getCreditCard(), formData.getAmount()));
     }
 }

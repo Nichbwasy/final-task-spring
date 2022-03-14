@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -25,17 +26,19 @@ public class BlockingRequestController {
     private BlockingRequestService blockingRequestService;
 
     @GetMapping("/requests/{page}")
-    public List<BlockingRequest> requests(@PathVariable String page) {
-        return blockingRequestService.getRequestsPage(Integer.parseInt(page) - 1);
+    public ResponseEntity<List<BlockingRequest>> requests(@PathVariable String page) {
+        return ResponseEntity.ok().body(blockingRequestService.getRequestsPage(Integer.parseInt(page) - 1));
     }
 
     @GetMapping("/requests/accept/{id}")
-    public void requestAccept(@PathVariable Long id) {
+    public ResponseEntity<?> requestAccept(@PathVariable Long id) {
         blockingRequestService.acceptRequest(id);
+        return ResponseEntity.ok().body(null);
     }
 
     @GetMapping("/requests/reject/{id}")
-    public void requestReject(@PathVariable Long id) {
+    public ResponseEntity<?> requestReject(@PathVariable Long id) {
         blockingRequestService.rejectRequest(id);
+        return ResponseEntity.ok().body(null);
     }
 }

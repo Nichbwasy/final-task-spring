@@ -61,6 +61,17 @@ public class Client {
     @ToString.Exclude
     private Collection<Role> roles;
 
+    public Client(String username, String password, String email, String firstName, String lastName, Collection<Role> roles) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.creditCards = new ArrayList<>();
+        this.enabled = true;
+        this.roles = roles;
+    }
+
     public Client(String username, String password, String email, String firstName, String lastName, Role role) {
         this.username = username;
         this.password = password;
