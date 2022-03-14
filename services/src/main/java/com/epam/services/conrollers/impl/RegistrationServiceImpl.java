@@ -19,6 +19,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Autowired
     private ClientRepository clientRepository;
+
     @Autowired
     private RoleRepository roleRepository;
 
