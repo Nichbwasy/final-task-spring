@@ -1,4 +1,4 @@
-package com.epam.security.encode;
+package com.epam.config.security.utils;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
